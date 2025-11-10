@@ -3,6 +3,7 @@ package floris0106.rejuvenation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -58,20 +59,26 @@ public class EventHandler
 			return;
 
 		ItemStack stack = player.getItemInHand(event.getHand());
+		boolean usedItem = true;
 		if (stack.is(Items.ENCHANTED_GOLDEN_APPLE) && corpse.getData(Rejuvenation.REJUVENATION_TICKS) == 0)
 		{
-			if (!player.gameMode.isCreative())
-				stack.shrink(1);
 			corpse.setData(Rejuvenation.REJUVENATION_TICKS, 400);
 			corpse.playSound(SoundEvents.ZOMBIE_VILLAGER_CURE);
-			event.setCanceled(true);
 		}
 		else if (stack.is(Items.TOTEM_OF_UNDYING) && !corpse.getData(Rejuvenation.HAS_TOTEM))
 		{
-			if (!player.gameMode.isCreative())
-				stack.shrink(1);
 			corpse.setData(Rejuvenation.HAS_TOTEM, true);
 			corpse.playSound(SoundEvents.ARMOR_EQUIP_GENERIC.value());
+		}
+		else
+			usedItem = false;
+
+		if (usedItem)
+		{
+			if (!player.gameMode.isCreative())
+				stack.shrink(1);
+
+			event.setCancellationResult(InteractionResult.CONSUME);
 			event.setCanceled(true);
 		}
 	}
