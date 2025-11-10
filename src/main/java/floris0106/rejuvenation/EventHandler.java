@@ -1,16 +1,15 @@
 package floris0106.rejuvenation;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityStruckByLightningEvent;
@@ -42,23 +41,14 @@ public class EventHandler
 			player.setGameMode(GameType.SPECTATOR);
 	}
 
-	@SuppressWarnings("resource")
 	@SubscribeEvent
 	private static void onUseTotem(LivingUseTotemEvent event)
 	{
 		if (!(event.getEntity() instanceof ServerPlayer player) || !player.hasEffect(Rejuvenation.REJUVENATION_EFFECT))
 			return;
 
-		ServerLevel level = player.serverLevel();
-		for (BlockPos pos = player.blockPosition(); pos.getY() >= level.getMinBuildHeight(); pos = pos.below())
-		{
-			if (level.getBlockEntity(pos, BlockEntityType.BEACON).filter(beacon -> !beacon.getBeamSections().isEmpty()).isEmpty())
-				continue;
-
-			float maxHealth = Math.min(player.getMaxHealth() + 2.0f, 20.0f);
-			Objects.requireNonNull(player.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(maxHealth);
-			return;
-		}
+		AttributeInstance maxHealthAttribute = Objects.requireNonNull(player.getAttribute(Attributes.MAX_HEALTH));
+		maxHealthAttribute.setBaseValue(Math.min(maxHealthAttribute.getBaseValue() + 2.0f, 20.0f));
 	}
 
 	@SubscribeEvent
