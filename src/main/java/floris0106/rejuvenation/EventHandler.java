@@ -32,16 +32,14 @@ public class EventHandler
 		if (!(event.getEntity() instanceof ServerPlayer player))
 			return;
 
-		float maxHealth = event.getOriginal().getMaxHealth();
+		double maxHealth = Objects.requireNonNull(event.getOriginal().getAttribute(Attributes.MAX_HEALTH)).getBaseValue();
 		if (event.isWasDeath() && player.gameMode.isSurvival())
 			maxHealth -= 2.0f;
-		if (maxHealth <= 0.0f)
-		{
-			player.setGameMode(GameType.SPECTATOR);
-			maxHealth = 20.0f;
-		}
 
-		Objects.requireNonNull(player.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(maxHealth);
+		if (maxHealth > 0.0f)
+			Objects.requireNonNull(player.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(maxHealth);
+		else
+			player.setGameMode(GameType.SPECTATOR);
 	}
 
 	@SuppressWarnings("resource")
@@ -103,18 +101,22 @@ public class EventHandler
 	@SubscribeEvent
 	private static void onLightningStrike(EntityStruckByLightningEvent event)
 	{
-		if (!(event.getEntity() instanceof CorpseEntity corpse) || corpse.getData(Rejuvenation.REJUVENATION_TICKS) == 0 || !corpse.getData(Rejuvenation.HAS_TOTEM))
+		if (!(event.getEntity() instanceof CorpseEntity corpse) ||
+			!(corpse.level() instanceof ServerLevel level) ||
+			corpse.getData(Rejuvenation.REJUVENATION_TICKS) == 0 ||
+			!corpse.getData(Rejuvenation.HAS_TOTEM))
 			return;
 
-		if (!(corpse.level() instanceof ServerLevel level))
-			return;
 		ServerPlayer player = level.getServer().getPlayerList().getPlayer(corpse.getDeath().getPlayerUUID());
 		if (player == null || player.gameMode.getGameModeForPlayer() != GameType.SPECTATOR)
 			return;
 
-		player.teleportTo(level, corpse.getX(), corpse.getY(), corpse.getZ(), 0.0f, 0.0f);
+		corpse.setData(Rejuvenation.REJUVENATION_TICKS, 0);
+		corpse.setData(Rejuvenation.HAS_TOTEM, false);
+
+		player.teleportTo(level, corpse.getX(), corpse.getY(), corpse.getZ(), corpse.getYRot(), 0.0f);
 		player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, 4));
-		player.setHealth(20.0f);
+		player.setHealth(player.getMaxHealth());
 		player.setGameMode(GameType.SURVIVAL);
 	}
 }
