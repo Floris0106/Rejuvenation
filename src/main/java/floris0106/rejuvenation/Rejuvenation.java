@@ -10,6 +10,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -17,6 +18,8 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import floris0106.rejuvenation.compat.CorpseCompat;
+import floris0106.rejuvenation.config.Config;
+import floris0106.rejuvenation.effect.RejuvenationMobEffect;
 
 @Mod(Rejuvenation.MODID)
 public class Rejuvenation
@@ -37,5 +40,7 @@ public class Rejuvenation
 
 		if (ModList.get().isLoaded("corpse"))
 			NeoForge.EVENT_BUS.register(CorpseCompat.class);
+
+		modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 	}
 }
