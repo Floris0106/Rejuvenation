@@ -3,7 +3,6 @@ package floris0106.rejuvenation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -23,10 +22,11 @@ public class EventHandler
 
 		AttributeInstance attribute = Objects.requireNonNull(player.getAttribute(Attributes.MAX_HEALTH));
 		double maxHealth = attribute.getBaseValue();
-		if (player.gameMode.isSurvival())
-			maxHealth -= 2.0f;
+		if (!player.gameMode.isSurvival())
+			return;
 
-		if (maxHealth > 0.0f)
+		maxHealth -= 2.0f;
+		if (maxHealth <= 0.0f)
 		{
 			maxHealth = 20.0f;
 			player.setGameMode(GameType.SPECTATOR);
