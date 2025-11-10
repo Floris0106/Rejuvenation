@@ -13,6 +13,7 @@ public class Config
 	public static final ModConfigSpec.DoubleValue MAX_HEALTH;
 	public static final ModConfigSpec.DoubleValue RESPAWN_HEALTH;
 	public static final ModConfigSpec.EnumValue<GameType> RESPAWN_GAMEMODE;
+	public static final ModConfigSpec.BooleanValue ENABLE_CORPSE_COMPAT;
 
 	static
 	{
@@ -31,7 +32,10 @@ public class Config
 			.translation("rejuvenation.config.max_health")
 			.defineInRange("maxHealth", 20.0, 1.0, 1000.0);
 
-		BUILDER.push("respawn");
+		BUILDER
+			.comment("Options related to player respawning")
+			.translation("rejuvenation.config.respawn")
+			.push("respawn");
 
 		RESPAWN_HEALTH = BUILDER
 			.comment("The amount of maximum health (in half-hearts) a player respawns with after being resurrected")
@@ -44,6 +48,23 @@ public class Config
 			.defineEnum("gamemode", GameType.SURVIVAL);
 
 		BUILDER.pop();
+
+		BUILDER
+			.comment("Options related to mod compatibility")
+			.translation("rejuvenation.config.compat")
+			.push("compat");
+
+		BUILDER
+			.comment("Corpse compatibility options")
+			.translation("rejuvenation.config.compat.corpse")
+			.push("corpse");
+
+		ENABLE_CORPSE_COMPAT = BUILDER.gameRestart()
+			.comment("Enable compatibility with the Corpse mod (ignored if Corpse isn't installed)")
+			.translation("rejuvenation.config.compat.corpse.enable")
+			.define("enable", true);
+
+		BUILDER.pop(2);
 
 		SPEC = BUILDER.build();
 	}

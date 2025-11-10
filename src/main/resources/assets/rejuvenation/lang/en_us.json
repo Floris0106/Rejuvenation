@@ -3,6 +3,10 @@
   "rejuvenation.config.health_lost": "Health lost on death",
   "rejuvenation.config.health_gained": "Health gained on rejuvenation",
   "rejuvenation.config.max_health": "Max health",
+  "rejuvenation.config.respawn": "Respawning",
   "rejuvenation.config.respawn.health": "Health on respawn",
-  "rejuvenation.config.respawn.gamemode": "Respawn gamemode"
+  "rejuvenation.config.respawn.gamemode": "Respawn gamemode",
+  "rejuvenation.config.compat": "Mod compatibility",
+  "rejuvenation.config.compat.corpse": "Corpse",
+  "rejuvenation.config.compat.corpse.enable": "Enable"
 }
