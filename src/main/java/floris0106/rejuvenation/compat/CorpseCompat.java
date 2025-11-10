@@ -16,6 +16,7 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 import de.maxhenkel.corpse.entities.CorpseEntity;
 import floris0106.rejuvenation.Rejuvenation;
+import floris0106.rejuvenation.config.Config;
 
 public class CorpseCompat
 {
@@ -81,6 +82,6 @@ public class CorpseCompat
 		player.teleportTo(level, corpse.getX(), corpse.getY(), corpse.getZ(), corpse.getYRot(), 0.0f);
 		player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, 4));
 		player.setHealth(player.getMaxHealth());
-		player.setGameMode(GameType.SURVIVAL);
+		player.setGameMode(Config.RESPAWN_GAMEMODE.get());
 	}
 }

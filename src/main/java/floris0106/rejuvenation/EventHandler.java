@@ -11,6 +11,8 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 import java.util.Objects;
 
+import floris0106.rejuvenation.config.Config;
+
 @EventBusSubscriber(modid = Rejuvenation.MODID)
 public class EventHandler
 {
@@ -25,10 +27,10 @@ public class EventHandler
 		if (!player.gameMode.isSurvival())
 			return;
 
-		maxHealth -= 2.0f;
+		maxHealth -= Config.HEALTH_LOST.getAsDouble();
 		if (maxHealth <= 0.0f)
 		{
-			maxHealth = 20.0f;
+			maxHealth = Config.RESPAWN_HEALTH.getAsDouble();
 			player.setGameMode(GameType.SPECTATOR);
 		}
 
@@ -42,6 +44,6 @@ public class EventHandler
 			return;
 
 		AttributeInstance attribute = Objects.requireNonNull(player.getAttribute(Attributes.MAX_HEALTH));
-		attribute.setBaseValue(Math.min(attribute.getBaseValue() + 2.0f, 20.0f));
+		attribute.setBaseValue(Math.min(attribute.getBaseValue() + Config.HEALTH_GAINED.getAsDouble(), Config.MAX_HEALTH.getAsDouble()));
 	}
 }
