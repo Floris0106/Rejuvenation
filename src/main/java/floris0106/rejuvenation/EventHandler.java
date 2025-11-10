@@ -3,6 +3,7 @@ package floris0106.rejuvenation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -15,19 +16,23 @@ import java.util.Objects;
 public class EventHandler
 {
 	@SubscribeEvent
-	private static void onClone(PlayerEvent.Clone event)
+	private static void onRespawn(PlayerEvent.PlayerRespawnEvent event)
 	{
-		if (!(event.getEntity() instanceof ServerPlayer player))
+		if (event.isEndConquered() || !(event.getEntity() instanceof ServerPlayer player))
 			return;
 
-		double maxHealth = Objects.requireNonNull(event.getOriginal().getAttribute(Attributes.MAX_HEALTH)).getBaseValue();
-		if (event.isWasDeath() && player.gameMode.isSurvival())
+		AttributeInstance attribute = Objects.requireNonNull(player.getAttribute(Attributes.MAX_HEALTH));
+		double maxHealth = attribute.getBaseValue();
+		if (player.gameMode.isSurvival())
 			maxHealth -= 2.0f;
 
 		if (maxHealth > 0.0f)
-			Objects.requireNonNull(player.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(maxHealth);
-		else
+		{
+			maxHealth = 20.0f;
 			player.setGameMode(GameType.SPECTATOR);
+		}
+
+		attribute.setBaseValue(maxHealth);
 	}
 
 	@SubscribeEvent
@@ -36,7 +41,7 @@ public class EventHandler
 		if (!(event.getEntity() instanceof ServerPlayer player) || !player.hasEffect(Rejuvenation.REJUVENATION_EFFECT))
 			return;
 
-		AttributeInstance maxHealthAttribute = Objects.requireNonNull(player.getAttribute(Attributes.MAX_HEALTH));
-		maxHealthAttribute.setBaseValue(Math.min(maxHealthAttribute.getBaseValue() + 2.0f, 20.0f));
+		AttributeInstance attribute = Objects.requireNonNull(player.getAttribute(Attributes.MAX_HEALTH));
+		attribute.setBaseValue(Math.min(attribute.getBaseValue() + 2.0f, 20.0f));
 	}
 }
