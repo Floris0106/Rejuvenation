@@ -2,9 +2,11 @@
   "required": true,
   "minVersion": "0.8",
   "package": "floris0106.rejuvenation.mixin",
-  "compatibilityLevel": "JAVA_21",
+  "plugin": "floris0106.rejuvenation.RejuvenationMixinPlugin",
+  "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "FoodsMixin"
+    "FoodsMixin",
+    "compat.corpse.CorpseEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

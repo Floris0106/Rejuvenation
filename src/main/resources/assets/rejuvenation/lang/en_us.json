@@ -8,5 +8,6 @@
   "rejuvenation.config.respawn.gamemode": "Respawn gamemode",
   "rejuvenation.config.compat": "Mod compatibility",
   "rejuvenation.config.compat.corpse": "Corpse",
-  "rejuvenation.config.compat.corpse.enable": "Enable"
+  "rejuvenation.config.compat.corpse.enable": "Enable",
+  "rejuvenation.config.compat.corpse.prevent_last_corpse_despawn": "Prevent last corpse despawn"
 }

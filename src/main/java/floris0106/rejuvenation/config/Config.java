@@ -14,6 +14,7 @@ public class Config
 	public static final ModConfigSpec.DoubleValue RESPAWN_HEALTH;
 	public static final ModConfigSpec.EnumValue<GameType> RESPAWN_GAMEMODE;
 	public static final ModConfigSpec.BooleanValue ENABLE_CORPSE_COMPAT;
+	public static final ModConfigSpec.BooleanValue PREVENT_LAST_CORPSE_DESPAWN;
 
 	static
 	{
@@ -63,6 +64,11 @@ public class Config
 			.comment("Enable compatibility with the Corpse mod (ignored if Corpse isn't installed)")
 			.translation("rejuvenation.config.compat.corpse.enable")
 			.define("enable", true);
+
+		PREVENT_LAST_CORPSE_DESPAWN = BUILDER
+			.comment("Prevents a player's last corpse from despawning to ensure they can always be resurrected")
+			.translation("rejuvenation.config.compat.corpse.prevent_last_corpse_despawn")
+			.define("preventLastCorpseDespawn", true);
 
 		BUILDER.pop(2);
 

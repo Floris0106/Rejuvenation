@@ -14,6 +14,10 @@ import net.neoforged.neoforge.event.entity.EntityStruckByLightningEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
+import java.util.List;
+
+import de.maxhenkel.corpse.corelib.death.Death;
+import de.maxhenkel.corpse.corelib.death.DeathManager;
 import de.maxhenkel.corpse.entities.CorpseEntity;
 import floris0106.rejuvenation.Rejuvenation;
 import floris0106.rejuvenation.config.Config;
@@ -83,5 +87,20 @@ public class CorpseCompat
 		player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, 4));
 		player.setHealth(player.getMaxHealth());
 		player.setGameMode(Config.RESPAWN_GAMEMODE.get());
+	}
+
+	public static boolean allowCorpseDespawn(CorpseEntity corpse)
+	{
+		if (!Config.ENABLE_CORPSE_COMPAT.get())
+			return true;
+
+		if (corpse.getData(Rejuvenation.REJUVENATION_TICKS) > 0)
+			return false;
+
+		if (!Config.PREVENT_LAST_CORPSE_DESPAWN.get())
+			return true;
+
+		List<Death> deaths = DeathManager.getDeaths((ServerLevel) corpse.level(), corpse.getDeath().getPlayerUUID());
+		return !deaths.isEmpty() && !corpse.getDeath().getId().equals(deaths.getFirst().getId());
 	}
 }
