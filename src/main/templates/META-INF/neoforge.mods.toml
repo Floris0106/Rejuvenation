@@ -31,7 +31,7 @@ side = "BOTH"
 
 [[dependencies."${mod_id}"]]
 modId = "corpse"
-type = "required"
+type = "optional"
 versionRange = "${corpse_version_range}"
 ordering = "NONE"
 side = "BOTH"
