@@ -19,6 +19,8 @@ import java.util.List;
 import de.maxhenkel.corpse.corelib.death.Death;
 import de.maxhenkel.corpse.corelib.death.DeathManager;
 import de.maxhenkel.corpse.entities.CorpseEntity;
+import de.maxhenkel.corpse.gui.Guis;
+import de.maxhenkel.corpse.gui.ITransferrable;
 import floris0106.rejuvenation.Rejuvenation;
 import floris0106.rejuvenation.config.Config;
 
@@ -87,6 +89,16 @@ public class CorpseCompat
 		player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, 4));
 		player.setHealth(player.getMaxHealth());
 		player.setGameMode(Config.RESPAWN_GAMEMODE.get());
+
+		Guis.openCorpseGUI(player, corpse);
+		if (player.containerMenu instanceof ITransferrable transferrable)
+		{
+			transferrable.transferItems();
+			player.closeContainer();
+			corpse.discard();
+		}
+		else
+			player.closeContainer();
 	}
 
 	public static boolean allowCorpseDespawn(CorpseEntity corpse)
